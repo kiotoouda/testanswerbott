@@ -1,16 +1,17 @@
 import telebot
 import re
+import os
 from flask import Flask
 from threading import Thread
 
 # === CONFIG ===
-TOKEN = '7701217661:AAE61OMv_c0H50T1rBnQ4xZsbeS8sxJvWf0'  # Bot tokeningiz
-ADMIN_IDS = [6548564636, 7139344893, 7189291937, 6880867791]  # Admin Telegram ID'lar
+TOKEN = os.getenv("TOKEN")  # Get from Railway ENV VAR
+ADMIN_IDS = [6548564636, 7139344893, 7189291937, 6880867791]
 
 bot = telebot.TeleBot(TOKEN)
 correct_answers = []
 
-# === Flask server for uptime bot ===
+# === Flask server for uptime ===
 app = Flask('')
 
 @app.route('/')
@@ -18,13 +19,13 @@ def home():
     return "Men tirikman!"
 
 def run():
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=False)
 
 def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# === Telegram Bot Handlers ===
+# === Bot Commands ===
 
 @bot.message_handler(commands=['start'])
 def start_handler(message):
